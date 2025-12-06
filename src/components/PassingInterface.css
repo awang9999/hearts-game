@@ -1,0 +1,199 @@
+.passing-interface {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.passing-interface__header {
+  text-align: center;
+  width: 100%;
+}
+
+.passing-interface__title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0 0 0.5rem 0;
+  color: #2c3e50;
+}
+
+.passing-interface__direction {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0.5rem 0;
+  color: #34495e;
+}
+
+.passing-interface__count {
+  font-size: 1rem;
+  margin: 0.5rem 0;
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+.passing-interface__hand {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.passing-interface__actions {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.passing-interface__confirm-button {
+  padding: 0.75rem 2rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: white;
+  background-color: #27ae60;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  min-width: 200px;
+  min-height: 44px; /* Touch target requirement: 9.1, 9.2 */
+  /* Performance optimization */
+  will-change: transform;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.passing-interface__confirm-button:hover:not(:disabled) {
+  background-color: #229954;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.passing-interface__confirm-button:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.1s ease;
+}
+
+/* Touch device optimization - Requirements: 9.1, 9.2 */
+@media (hover: none) and (pointer: coarse) {
+  .passing-interface__confirm-button:hover:not(:disabled) {
+    transform: none;
+  }
+  
+  .passing-interface__confirm-button:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+}
+
+.passing-interface__confirm-button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* iPad portrait optimization - Requirements: 9.1, 9.3 */
+@media (min-width: 768px) and (max-width: 834px) and (orientation: portrait) {
+  .passing-interface {
+    padding: 1.125rem;
+    gap: 1.25rem;
+  }
+
+  .passing-interface__title {
+    font-size: 1.375rem;
+  }
+
+  .passing-interface__direction {
+    font-size: 1.0625rem;
+  }
+
+  .passing-interface__confirm-button {
+    min-width: 220px;
+    min-height: 48px;
+  }
+}
+
+/* iPad landscape optimization - Requirements: 9.1, 9.3 */
+@media (min-width: 1024px) and (max-width: 1194px) and (orientation: landscape) {
+  .passing-interface {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .passing-interface__title {
+    font-size: 1.375rem;
+  }
+
+  .passing-interface__confirm-button {
+    min-width: 200px;
+  }
+}
+
+/* Mobile optimization - Requirements: 9.1, 9.2, 9.3, 9.4 */
+@media (max-width: 768px) {
+  .passing-interface {
+    padding: 0.75rem;
+    gap: 1rem;
+  }
+
+  .passing-interface__title {
+    font-size: 1.25rem;
+  }
+
+  .passing-interface__direction {
+    font-size: 1rem;
+  }
+
+  .passing-interface__count {
+    font-size: 0.875rem;
+  }
+
+  .passing-interface__confirm-button {
+    padding: 0.625rem 1.5rem;
+    font-size: 1rem;
+    min-width: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .passing-interface {
+    padding: 0.625rem;
+    gap: 0.875rem;
+  }
+
+  .passing-interface__title {
+    font-size: 1.125rem;
+  }
+
+  .passing-interface__direction {
+    font-size: 0.9375rem;
+  }
+
+  .passing-interface__count {
+    font-size: 0.8125rem;
+  }
+
+  .passing-interface__confirm-button {
+    padding: 0.5625rem 1.25rem;
+    font-size: 0.9375rem;
+    min-width: 160px;
+  }
+}
+
+/* Landscape optimization - Requirements: 9.1, 9.3 */
+@media (max-width: 896px) and (orientation: landscape) {
+  .passing-interface {
+    padding: 0.625rem;
+    gap: 0.75rem;
+  }
+
+  .passing-interface__title {
+    font-size: 1.125rem;
+  }
+
+  .passing-interface__direction {
+    font-size: 0.9375rem;
+  }
+}

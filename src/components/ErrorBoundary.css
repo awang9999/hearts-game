@@ -1,0 +1,180 @@
+.error-boundary {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 1rem;
+}
+
+.error-boundary__container {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  max-width: 600px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.error-boundary__title {
+  color: #d32f2f;
+  font-size: 1.75rem;
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+}
+
+.error-boundary__message {
+  color: #333;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0 0 1.5rem 0;
+}
+
+.error-boundary__details {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.error-boundary__summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #555;
+  user-select: none;
+}
+
+.error-boundary__summary:hover {
+  color: #333;
+}
+
+.error-boundary__error-text {
+  margin: 1rem 0 0 0;
+  padding: 0;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+  color: #d32f2f;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
+}
+
+.error-boundary__reset-button {
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  width: 100%;
+  margin: 0.5rem 0;
+  /* Touch target - Requirements: 9.1, 9.2 */
+  min-height: 44px;
+  /* Performance optimization */
+  will-change: transform;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.error-boundary__reset-button:hover {
+  background: #5568d3;
+}
+
+.error-boundary__reset-button:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+/* Touch device optimization - Requirements: 9.1, 9.2 */
+@media (hover: none) and (pointer: coarse) {
+  .error-boundary__reset-button:hover {
+    background: #667eea;
+  }
+  
+  .error-boundary__reset-button:active {
+    background: #5568d3;
+  }
+}
+
+.error-boundary__help-text {
+  color: #666;
+  font-size: 0.875rem;
+  margin: 1rem 0 0 0;
+  text-align: center;
+}
+
+
+/* iPad optimization - Requirements: 9.1, 9.3 */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .error-boundary__container {
+    padding: 1.75rem;
+    max-width: 640px;
+  }
+
+  .error-boundary__title {
+    font-size: 1.625rem;
+  }
+
+  .error-boundary__reset-button {
+    min-height: 48px;
+  }
+}
+
+/* Mobile optimization - Requirements: 9.1, 9.3, 9.4 */
+@media (max-width: 768px) {
+  .error-boundary__container {
+    padding: 1.5rem;
+  }
+
+  .error-boundary__title {
+    font-size: 1.5rem;
+  }
+
+  .error-boundary__message {
+    font-size: 0.9375rem;
+  }
+
+  .error-boundary__error-text {
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .error-boundary__container {
+    padding: 1.25rem;
+  }
+
+  .error-boundary__title {
+    font-size: 1.3rem;
+  }
+
+  .error-boundary__message {
+    font-size: 0.875rem;
+  }
+
+  .error-boundary__error-text {
+    font-size: 0.75rem;
+  }
+
+  .error-boundary__reset-button {
+    font-size: 0.9375rem;
+    padding: 0.625rem 1.25rem;
+  }
+}
+
+/* Landscape optimization - Requirements: 9.1, 9.3 */
+@media (max-width: 896px) and (orientation: landscape) {
+  .error-boundary__container {
+    padding: 1.25rem;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+
+  .error-boundary__title {
+    font-size: 1.3rem;
+  }
+}

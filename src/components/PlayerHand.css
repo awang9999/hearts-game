@@ -1,0 +1,98 @@
+.player-hand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.player-hand__label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.player-hand__cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  max-width: 100%;
+  /* Performance optimization - Requirements: 9.1 */
+  will-change: contents;
+}
+
+.player-hand__card {
+  flex-shrink: 0;
+}
+
+/* iPad optimization - Requirements: 9.1, 9.3 */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .player-hand {
+    padding: 0.875rem;
+  }
+  
+  .player-hand__cards {
+    gap: 0.625rem;
+  }
+}
+
+/* Responsive layout - Requirements: 9.1, 9.3, 9.4 */
+@media (max-width: 768px) {
+  .player-hand {
+    padding: 0.5rem;
+  }
+  
+  .player-hand__cards {
+    gap: 0.3rem;
+  }
+  
+  .player-hand__label {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .player-hand {
+    padding: 0.375rem;
+  }
+  
+  .player-hand__cards {
+    gap: 0.25rem;
+  }
+  
+  .player-hand__label {
+    font-size: 0.9rem;
+  }
+}
+
+/* Landscape orientation optimization - Requirements: 9.1, 9.3 */
+@media (max-width: 1024px) and (orientation: landscape) {
+  .player-hand {
+    padding: 0.5rem;
+  }
+  
+  .player-hand__cards {
+    max-height: 35vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+  
+  .player-hand__cards::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .player-hand__cards::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 3px;
+  }
+}
+
+/* iPad landscape specific - Requirements: 9.1, 9.3 */
+@media (min-width: 1024px) and (max-width: 1194px) and (orientation: landscape) {
+  .player-hand__cards {
+    max-height: 45vh;
+  }
+}
+

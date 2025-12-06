@@ -1,0 +1,193 @@
+.scoreboard {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.scoreboard__title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: #333;
+}
+
+.scoreboard__players {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.scoreboard__player {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  border-radius: 6px;
+  background: #f5f5f5;
+  transition: background 0.2s ease, border 0.2s ease, transform 0.2s ease;
+  /* Touch target - Requirements: 9.1 */
+  min-height: 44px;
+}
+
+.scoreboard__player--active {
+  background: #e3f2fd;
+  border: 2px solid #2196f3;
+  font-weight: 600;
+}
+
+.scoreboard__player-name {
+  font-size: 1rem;
+  color: #333;
+}
+
+.scoreboard__scores {
+  display: flex;
+  gap: 1rem;
+}
+
+.scoreboard__score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.scoreboard__score-label {
+  font-size: 0.75rem;
+  color: #666;
+  text-transform: uppercase;
+}
+
+.scoreboard__score-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.scoreboard__score--total .scoreboard__score-value {
+  color: #d32f2f;
+}
+
+/* iPad optimization - Requirements: 9.1, 9.3 */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .scoreboard {
+    padding: 0.875rem;
+  }
+  
+  .scoreboard__title {
+    font-size: 1.1rem;
+  }
+  
+  .scoreboard__player {
+    padding: 0.625rem;
+  }
+  
+  .scoreboard__player-name {
+    font-size: 0.95rem;
+  }
+  
+  .scoreboard__scores {
+    gap: 0.75rem;
+  }
+}
+
+/* Responsive layout - Requirements: 9.1, 9.3, 9.4 */
+@media (max-width: 768px) {
+  .scoreboard {
+    padding: 0.75rem;
+  }
+  
+  .scoreboard__title {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .scoreboard__player {
+    padding: 0.5rem;
+  }
+  
+  .scoreboard__player-name {
+    font-size: 0.9rem;
+  }
+  
+  .scoreboard__scores {
+    gap: 0.5rem;
+  }
+  
+  .scoreboard__score-label {
+    font-size: 0.7rem;
+  }
+  
+  .scoreboard__score-value {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .scoreboard {
+    padding: 0.625rem;
+  }
+  
+  .scoreboard__title {
+    font-size: 0.9rem;
+  }
+  
+  .scoreboard__player {
+    padding: 0.4rem;
+  }
+  
+  .scoreboard__player-name {
+    font-size: 0.85rem;
+  }
+  
+  .scoreboard__score-label {
+    font-size: 0.65rem;
+  }
+  
+  .scoreboard__score-value {
+    font-size: 0.9rem;
+  }
+}
+
+/* Horizontal layout for larger screens */
+@media (min-width: 1024px) {
+  .scoreboard__players {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .scoreboard__player {
+    flex: 1;
+    min-width: 200px;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .scoreboard__scores {
+    width: 100%;
+    justify-content: space-around;
+  }
+}
+
+/* Landscape optimization - Requirements: 9.1, 9.3 */
+@media (max-width: 896px) and (orientation: landscape) {
+  .scoreboard {
+    padding: 0.5rem;
+  }
+  
+  .scoreboard__title {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .scoreboard__players {
+    gap: 0.5rem;
+  }
+  
+  .scoreboard__player {
+    padding: 0.4rem;
+  }
+}
+

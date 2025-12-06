@@ -1,0 +1,328 @@
+.game-over {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.game-over__backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.game-over__modal {
+  position: relative;
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  min-width: 320px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.game-over__title {
+  text-align: center;
+  margin: 0 0 1.5rem 0;
+  color: #333;
+  font-size: 2rem;
+}
+
+.game-over__winner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 165, 0, 0.2));
+  border-radius: 12px;
+  border: 2px solid rgba(255, 215, 0, 0.5);
+}
+
+.game-over__trophy {
+  font-size: 3rem;
+  animation: bounce 1s ease-in-out infinite;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.game-over__winner-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.game-over__scores {
+  margin-bottom: 1.5rem;
+}
+
+.game-over__scores-title {
+  text-align: center;
+  margin: 0 0 1rem 0;
+  color: #666;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.game-over__score {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: #f5f5f5;
+  border-radius: 8px;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+  transition: transform 0.2s ease;
+}
+
+.game-over__score:hover {
+  transform: translateX(4px);
+}
+
+.game-over__score--winner {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 165, 0, 0.15));
+  border: 2px solid rgba(255, 215, 0, 0.4);
+  font-weight: 600;
+}
+
+.game-over__rank {
+  font-size: 1.2rem;
+  min-width: 2.5rem;
+  text-align: center;
+}
+
+.game-over__name {
+  flex: 1;
+  font-weight: 600;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.game-over__points {
+  font-weight: 700;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.game-over__button {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border: none;
+  background: #2196f3;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  /* Touch target - Requirements: 9.1, 9.2 */
+  min-height: 44px;
+  /* Performance optimization */
+  will-change: transform;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.game-over__button:hover {
+  background: #1976d2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+}
+
+.game-over__button:active {
+  transform: translateY(0);
+  transition: transform 0.1s ease;
+}
+
+.game-over__button:focus {
+  outline: 2px solid #2196f3;
+  outline-offset: 2px;
+}
+
+/* Touch device optimization - Requirements: 9.1, 9.2 */
+@media (hover: none) and (pointer: coarse) {
+  .game-over__button:hover {
+    transform: none;
+  }
+  
+  .game-over__button:active {
+    transform: scale(0.98);
+  }
+}
+
+/* iPad optimization - Requirements: 9.1, 9.3 */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .game-over__modal {
+    padding: 1.75rem;
+    min-width: 360px;
+  }
+
+  .game-over__title {
+    font-size: 1.875rem;
+  }
+
+  .game-over__trophy {
+    font-size: 2.75rem;
+  }
+
+  .game-over__button {
+    min-height: 48px;
+  }
+}
+
+/* Responsive design - Requirements: 9.1, 9.3, 9.4 */
+@media (max-width: 768px) {
+  .game-over__modal {
+    padding: 1.5rem;
+    min-width: 280px;
+  }
+
+  .game-over__title {
+    font-size: 1.6rem;
+  }
+
+  .game-over__trophy {
+    font-size: 2.5rem;
+  }
+
+  .game-over__winner-name {
+    font-size: 1.3rem;
+  }
+
+  .game-over__scores-title {
+    font-size: 1.1rem;
+  }
+
+  .game-over__score {
+    padding: 0.6rem 0.8rem;
+  }
+
+  .game-over__rank {
+    font-size: 1.1rem;
+    min-width: 2rem;
+  }
+
+  .game-over__name,
+  .game-over__points {
+    font-size: 1rem;
+  }
+
+  .game-over__button {
+    font-size: 1rem;
+    padding: 0.6rem 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-over__modal {
+    padding: 1.25rem;
+  }
+
+  .game-over__title {
+    font-size: 1.4rem;
+  }
+
+  .game-over__trophy {
+    font-size: 2rem;
+  }
+
+  .game-over__winner-name {
+    font-size: 1.2rem;
+  }
+
+  .game-over__scores-title {
+    font-size: 1rem;
+  }
+
+  .game-over__score {
+    padding: 0.5rem 0.7rem;
+  }
+
+  .game-over__rank {
+    font-size: 1rem;
+  }
+
+  .game-over__name,
+  .game-over__points {
+    font-size: 0.9rem;
+  }
+
+  .game-over__button {
+    font-size: 0.9375rem;
+    padding: 0.5625rem 1.125rem;
+  }
+}
+
+/* Landscape optimization - Requirements: 9.1, 9.3 */
+@media (max-width: 896px) and (orientation: landscape) {
+  .game-over__modal {
+    padding: 1rem;
+    max-height: 85vh;
+  }
+
+  .game-over__title {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+
+  .game-over__trophy {
+    font-size: 2rem;
+  }
+
+  .game-over__winner {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+  }
+
+  .game-over__scores {
+    margin-bottom: 1rem;
+  }
+
+  .game-over__score {
+    padding: 0.5rem 0.7rem;
+    margin-bottom: 0.375rem;
+  }
+}
+
+/* Dark mode support */
