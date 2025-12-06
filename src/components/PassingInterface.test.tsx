@@ -12,7 +12,7 @@ describe('PassingInterface', () => {
     createCard('hearts', 'A'),
   ];
 
-  it('should render with passing direction text', () => {
+  it('should render with cards', () => {
     const onConfirm = vi.fn();
     render(
       <PassingInterface
@@ -22,29 +22,34 @@ describe('PassingInterface', () => {
       />
     );
 
-    expect(screen.getByText(/Pass 3 cards to the player on your LEFT/i)).toBeDefined();
+    expect(screen.getByText('Confirm Selection')).toBeDefined();
   });
 
-  it('should show selected count', () => {
+  it('should call onSelectionChange when cards are selected', () => {
     const onConfirm = vi.fn();
+    const onSelectionChange = vi.fn();
     render(
       <PassingInterface
         cards={mockCards}
         passingDirection="right"
         onConfirmPassing={onConfirm}
+        onSelectionChange={onSelectionChange}
       />
     );
 
-    expect(screen.getByText(/Selected: 0 \/ 3 cards/i)).toBeDefined();
+    // Should be called with 0 initially
+    expect(onSelectionChange).toHaveBeenCalledWith(0);
   });
 
   it('should allow selecting up to 3 cards', () => {
     const onConfirm = vi.fn();
+    const onSelectionChange = vi.fn();
     render(
       <PassingInterface
         cards={mockCards}
         passingDirection="across"
         onConfirmPassing={onConfirm}
+        onSelectionChange={onSelectionChange}
       />
     );
 
@@ -55,7 +60,7 @@ describe('PassingInterface', () => {
     fireEvent.click(cards[1]);
     fireEvent.click(cards[2]);
 
-    expect(screen.getByText(/Selected: 3 \/ 3 cards/i)).toBeDefined();
+    expect(onSelectionChange).toHaveBeenCalledWith(3);
   });
 
   it('should enable confirm button when 3 cards are selected', () => {
@@ -111,11 +116,13 @@ describe('PassingInterface', () => {
 
   it('should allow deselecting cards', () => {
     const onConfirm = vi.fn();
+    const onSelectionChange = vi.fn();
     render(
       <PassingInterface
         cards={mockCards}
         passingDirection="left"
         onConfirmPassing={onConfirm}
+        onSelectionChange={onSelectionChange}
       />
     );
 
@@ -124,20 +131,22 @@ describe('PassingInterface', () => {
     // Select 2 cards
     fireEvent.click(cards[0]);
     fireEvent.click(cards[1]);
-    expect(screen.getByText(/Selected: 2 \/ 3 cards/i)).toBeDefined();
+    expect(onSelectionChange).toHaveBeenCalledWith(2);
 
     // Deselect first card
     fireEvent.click(cards[0]);
-    expect(screen.getByText(/Selected: 1 \/ 3 cards/i)).toBeDefined();
+    expect(onSelectionChange).toHaveBeenCalledWith(1);
   });
 
   it('should not allow selecting more than 3 cards', () => {
     const onConfirm = vi.fn();
+    const onSelectionChange = vi.fn();
     render(
       <PassingInterface
         cards={mockCards}
         passingDirection="left"
         onConfirmPassing={onConfirm}
+        onSelectionChange={onSelectionChange}
       />
     );
 
@@ -150,7 +159,8 @@ describe('PassingInterface', () => {
     fireEvent.click(cards[3]);
 
     // Should still show only 3 selected
-    expect(screen.getByText(/Selected: 3 \/ 3 cards/i)).toBeDefined();
+    expect(onSelectionChange).toHaveBeenCalledWith(3);
+    expect(onSelectionChange).not.toHaveBeenCalledWith(4);
   });
 
   it('should show message when passing direction is none', () => {
@@ -169,23 +179,28 @@ describe('PassingInterface', () => {
 
   it('should be disabled when disabled prop is true', () => {
     const onConfirm = vi.fn();
+    const onSelectionChange = vi.fn();
     render(
       <PassingInterface
         cards={mockCards}
         passingDirection="left"
         onConfirmPassing={onConfirm}
+        onSelectionChange={onSelectionChange}
         disabled={true}
       />
     );
 
     const cards = screen.getAllByRole('button', { name: /of/i });
     
+    // Clear previous calls
+    onSelectionChange.mockClear();
+    
     // Try to select cards
     fireEvent.click(cards[0]);
     fireEvent.click(cards[1]);
     fireEvent.click(cards[2]);
 
-    // Should not select any cards
-    expect(screen.getByText(/Selected: 0 \/ 3 cards/i)).toBeDefined();
+    // Should not select any cards (no new calls)
+    expect(onSelectionChange).not.toHaveBeenCalled();
   });
 });

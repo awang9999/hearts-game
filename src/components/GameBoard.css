@@ -1,19 +1,27 @@
 .game-board {
   max-width: 1400px;
-  margin: 0 auto;
+  width: 100%;
   padding: 1rem;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  justify-content: center;
 }
 
-/* On larger displays (desktop), center the game vertically */
+/* On larger displays (desktop), center and constrain the game */
 @media (min-width: 1025px) {
   .game-board {
     max-width: 1200px;
   }
+}
+
+/* Center specific elements that should be centered */
+.game-board__header,
+.game-board__status,
+.game-board__passing,
+.game-board__player-area {
+  align-self: center;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .game-board__loading,
@@ -400,6 +408,13 @@
   font-size: 0.95rem;
   color: #666;
   font-weight: 500;
+}
+
+.game-board__passing-count {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  font-weight: 500;
+  margin-top: 0.25rem;
 }
 
 /* AI thinking indicator - Requirements: 8.3 */

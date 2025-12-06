@@ -53,6 +53,7 @@ export function GameBoard() {
   const [showingTrickResult, setShowingTrickResult] = useState(false);
   const [showRules, setShowRules] = useState(false);
   const [fastMode, setFastMode] = useState(false);
+  const [selectedPassingCount, setSelectedPassingCount] = useState(0);
   const previousTrickLength = useRef(0);
 
   // Load saved game and settings on mount
@@ -363,6 +364,9 @@ export function GameBoard() {
                     {gameState.passingDirection === 'right' && 'Pass 3 cards RIGHT'}
                     {gameState.passingDirection === 'across' && 'Pass 3 cards ACROSS'}
                   </div>
+                  <div className="game-board__passing-count">
+                    Selected: {selectedPassingCount} / 3
+                  </div>
                 </>
               ) : (
                 <>
@@ -378,10 +382,6 @@ export function GameBoard() {
                 {humanPlayer.name}
               </div>
               <div className="game-board__player-stats">
-                <div className="game-board__player-stat">
-                  <span className="game-board__player-stat-label">Cards:</span>
-                  <span className="game-board__player-stat-value">{humanPlayer.hand.length}</span>
-                </div>
                 <div className="game-board__player-stat">
                   <span className="game-board__player-stat-label">Tricks:</span>
                   <span className="game-board__player-stat-value">{humanPlayer.tricksTaken.length}</span>
@@ -411,6 +411,7 @@ export function GameBoard() {
               onConfirmPassing={(cards) => {
                 selectPassingCards(humanPlayer.id, cards);
               }}
+              onSelectionChange={setSelectedPassingCount}
               disabled={isProcessingAI}
             />
           )}
@@ -426,10 +427,6 @@ export function GameBoard() {
               {humanPlayer.name}
             </div>
             <div className="game-board__player-stats">
-              <div className="game-board__player-stat">
-                <span className="game-board__player-stat-label">Cards:</span>
-                <span className="game-board__player-stat-value">{humanPlayer.hand.length}</span>
-              </div>
               <div className="game-board__player-stat">
                 <span className="game-board__player-stat-label">Tricks:</span>
                 <span className="game-board__player-stat-value">{humanPlayer.tricksTaken.length}</span>

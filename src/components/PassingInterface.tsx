@@ -7,6 +7,7 @@ interface PassingInterfaceProps {
   cards: CardType[];
   passingDirection: PassingDirection;
   onConfirmPassing: (selectedCards: CardType[]) => void;
+  onSelectionChange?: (count: number) => void;
   disabled?: boolean;
 }
 
@@ -18,6 +19,7 @@ export function PassingInterface({
   cards,
   passingDirection,
   onConfirmPassing,
+  onSelectionChange,
   disabled = false
 }: PassingInterfaceProps) {
   const [selectedCards, setSelectedCards] = useState<CardType[]>([]);
@@ -26,7 +28,13 @@ export function PassingInterface({
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setSelectedCards([]);
-  }, [cards]);
+    onSelectionChange?.(0);
+  }, [cards, onSelectionChange]);
+
+  // Notify parent of selection changes
+  useEffect(() => {
+    onSelectionChange?.(selectedCards.length);
+  }, [selectedCards.length, onSelectionChange]);
 
   const handleCardClick = (card: CardType) => {
     if (disabled) return;
@@ -84,20 +92,12 @@ export function PassingInterface({
 
   return (
     <div className="passing-interface">
-      <div className="passing-interface__header">
-        <h2 className="passing-interface__title">Passing Phase</h2>
-        <p className="passing-interface__direction">{getPassingDirectionText(passingDirection)}</p>
-        <p className="passing-interface__count">
-          Selected: {selectedCards.length} / 3 cards
-        </p>
-      </div>
-
       <div className="passing-interface__hand">
         <PlayerHand
           cards={cards}
           onCardClick={handleCardClick}
           selectedCards={selectedCards}
-          label="Select 3 cards to pass"
+          label=""
         />
       </div>
 

@@ -44,10 +44,6 @@ export function OpponentDisplay({ player, position, isActive, isThinking = false
         </div>
         <div className="opponent__stats">
           <div className="opponent__stat">
-            <span className="opponent__stat-label">Cards:</span>
-            <span className="opponent__stat-value">{player.hand.length}</span>
-          </div>
-          <div className="opponent__stat">
             <span className="opponent__stat-label">Tricks:</span>
             <span className="opponent__stat-value">{player.tricksTaken.length}</span>
           </div>
