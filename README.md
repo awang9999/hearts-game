@@ -42,6 +42,10 @@ Hearts is a classic trick-taking card game where the objective is to avoid takin
 - **Type Safety**: Full TypeScript implementation
 - **Performance Optimized**: Smooth animations and transitions
 
+## Live Demo
+
+🎮 **Play now**: https://hearts.alexander-wang.net
+
 ## Getting Started
 
 ### Prerequisites
@@ -185,6 +189,34 @@ The project follows a clean architecture pattern:
 - Firefox (latest)
 - Safari (latest)
 - Mobile browsers (iOS Safari, Chrome Mobile)
+
+## Deployment
+
+This project is deployed on AWS with S3, CloudFront, and Route 53.
+
+**Live URL**: https://hearts.alexander-wang.net
+
+### Quick Deployment
+
+```bash
+# First time deployment
+./deploy.sh
+
+# Update content
+./update.sh
+
+# Remove deployment
+./teardown.sh
+```
+
+### Documentation
+
+See **[documentation/DEPLOYMENT_GUIDE.md](documentation/DEPLOYMENT_GUIDE.md)** for complete deployment documentation including:
+- Deployment scripts and workflows
+- AWS resource configuration
+- IAM permissions
+- Troubleshooting
+- Cost information
 
 ## Contributing
 

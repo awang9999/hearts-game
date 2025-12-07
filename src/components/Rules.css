@@ -188,6 +188,36 @@
   }
 }
 
+/* Source attribution */
+.rules-source {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.rules-source-text {
+  font-size: 0.9rem;
+  color: #666;
+  text-align: center;
+  margin: 0;
+}
+
+.rules-link {
+  color: #1976d2;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.rules-link:hover {
+  color: #2196f3;
+  text-decoration: underline;
+}
+
+.rules-link:visited {
+  color: #1565c0;
+}
+
 @media (max-width: 480px) {
   .rules-overlay {
     padding: 0.5rem;
@@ -221,6 +251,10 @@
 
   .rules-section ul {
     padding-left: 1.25rem;
+  }
+
+  .rules-source-text {
+    font-size: 0.85rem;
   }
 
   .rules-button {

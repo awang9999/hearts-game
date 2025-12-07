@@ -83,6 +83,20 @@ export function Rules({ onClose }: RulesProps) {
             <h3>Winning</h3>
             <p>The game ends when any player reaches <strong>100 points or more</strong>. The player with the <strong>lowest total score</strong> wins!</p>
           </section>
+
+          <section className="rules-section rules-source">
+            <p className="rules-source-text">
+              Rules based on{' '}
+              <a
+                href="https://en.wikipedia.org/wiki/Hearts_(card_game)#Modern_rules_(2011)"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rules-link"
+              >
+                Modern Hearts Rules (Wikipedia)
+              </a>
+            </p>
+          </section>
         </div>
 
         <div className="rules-footer">

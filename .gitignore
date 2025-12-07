@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# AWS credentials and policies
+aws-iam-policy-*.json
+*.pem
+*.key
+.aws/

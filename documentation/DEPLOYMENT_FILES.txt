@@ -1,0 +1,46 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                    DEPLOYMENT FILES - QUICK REFERENCE                        ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+📚 DOCUMENTATION (Read This)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  documentation/DEPLOYMENT_GUIDE.md    Complete deployment guide (START HERE!)
+
+🚀 DEPLOYMENT SCRIPTS (Run These - from project root)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ./deploy.sh                     Full deployment
+  ./update.sh                     Quick content update
+  ./teardown.sh                   Remove all resources
+
+🔐 IAM POLICIES (For AWS Permissions - in project root)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  aws-iam-policy-minimal.json.example    Example minimal permissions
+  aws-iam-policy-required.json.example   Example complete permissions
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+QUICK START:
+
+  1. Read: documentation/DEPLOYMENT_GUIDE.md
+  2. Run:  ./deploy.sh
+  3. Wait: 15-20 minutes for CloudFront
+  4. Visit: https://hearts.alexander-wang.net
+
+UPDATE CONTENT:
+
+  1. Make code changes
+  2. Run: ./update.sh
+  3. Wait: 1-2 minutes
+
+REMOVE DEPLOYMENT:
+
+  1. Run: ./teardown.sh
+  2. Type: DELETE
+  3. Wait: ~15 minutes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
