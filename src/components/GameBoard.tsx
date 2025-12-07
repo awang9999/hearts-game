@@ -189,6 +189,17 @@ export function GameBoard() {
             />
           </span>
           Hearts
+          <span className="game-board__title-credit">
+            by{' '}
+            <a
+              href="https://alexander-wang.net"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="game-board__title-link"
+            >
+              Alexander Wang
+            </a>
+          </span>
         </h1>
         
         {/* Desktop controls */}

@@ -171,7 +171,7 @@ export function selectCardToLead(hand: Card[], validPlays: Card[], gameState: Ga
  * @param gameState - The current game state
  * @returns The card to play
  */
-export function selectCardToFollow(hand: Card[], validPlays: Card[], gameState: GameState): Card {
+export function selectCardToFollow(_hand: Card[], validPlays: Card[], gameState: GameState): Card {
   if (validPlays.length === 0) {
     throw new Error('No valid plays available');
   }
@@ -220,7 +220,6 @@ export function selectCardToFollow(hand: Card[], validPlays: Card[], gameState: 
   }
 
   // Strategy: Protect very low cards (2-4) for late game
-  const veryLowCards = validPlays.filter(c => c.value >= 2 && c.value <= 4);
   const otherCards = validPlays.filter(c => c.value > 4);
 
   // If we can avoid winning, do so
@@ -293,7 +292,7 @@ export function selectCardToFollow(hand: Card[], validPlays: Card[], gameState: 
  * @param gameState - The current game state
  * @returns The card to play
  */
-export function selectCardToSlough(hand: Card[], validPlays: Card[], gameState: GameState): Card {
+export function selectCardToSlough(_hand: Card[], validPlays: Card[], gameState: GameState): Card {
   if (validPlays.length === 0) {
     throw new Error('No valid plays available');
   }
@@ -301,20 +300,6 @@ export function selectCardToSlough(hand: Card[], validPlays: Card[], gameState: 
   // If only one valid play, return it
   if (validPlays.length === 1) {
     return validPlays[0];
-  }
-
-  // Determine who is likely to win this trick
-  const ledSuit = getLedSuit(gameState);
-  let currentWinningValue = 0;
-  let currentWinningPlayerId = '';
-
-  if (ledSuit) {
-    for (const playedCard of gameState.currentTrick) {
-      if (playedCard.card.suit === ledSuit && playedCard.card.value > currentWinningValue) {
-        currentWinningValue = playedCard.card.value;
-        currentWinningPlayerId = playedCard.playerId;
-      }
-    }
   }
 
   // Check if we're the last to play (most certain about who wins)
@@ -328,10 +313,8 @@ export function selectCardToSlough(hand: Card[], validPlays: Card[], gameState: 
 
   // Separate cards by type
   const hearts = validPlays.filter(c => isHeart(c));
-  const nonHearts = validPlays.filter(c => !isHeart(c));
   const aceOfHearts = hearts.find(c => c.rank === 'A');
   const highCards = validPlays.filter(c => c.value >= 12); // Q, K, A
-  const veryLowCards = validPlays.filter(c => c.value >= 2 && c.value <= 4);
 
   // Strategy: Dump Ace of Hearts (prevents moon shots and is high penalty)
   if (aceOfHearts && isLastToPlay) {
