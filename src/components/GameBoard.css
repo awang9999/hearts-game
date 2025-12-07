@@ -69,6 +69,36 @@
   gap: 0.75rem;
 }
 
+.game-board__hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.game-board__hamburger:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.game-board__hamburger:active {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.game-board__hamburger-line {
+  width: 100%;
+  height: 3px;
+  background: #333;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
 .game-board__rules-button {
   background: #4caf50;
   color: white;
@@ -166,7 +196,7 @@
   top: 12px;
   right: 12px;
   font-size: 2rem;
-  z-index: 5;
+  z-index: 15;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
   transition: transform 0.3s ease;
 }
@@ -226,12 +256,14 @@
   box-shadow: 
     inset 0 2px 8px rgba(0, 0, 0, 0.1), 
     0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1;
 }
 
 /* Played cards on table - positioned on each side */
 .game-board__table-card {
   position: absolute;
   animation: cardSlideToTable 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 5;
 }
 
 /* Leading card indicator */
@@ -277,7 +309,7 @@
 /* Trick winner message - centered on table */
 .game-board__trick-winner {
   position: absolute;
-  z-index: 10;
+  z-index: 20;
   font-size: 1.2rem;
   font-weight: 700;
   color: #2196f3;
@@ -524,7 +556,7 @@
   }
 
   .game-board__header {
-    flex-direction: column;
+    flex-direction: row;
     gap: 0.5rem;
     padding: 0.75rem;
   }
@@ -533,26 +565,12 @@
     font-size: 1.5rem;
   }
 
-  .game-board__header-controls {
-    flex-direction: column;
-    gap: 0.5rem;
-    width: 100%;
+  .game-board__header-controls--desktop {
+    display: none;
   }
 
-  .game-board__rules-button {
-    width: 100%;
-    justify-content: center;
-    padding: 0.5rem;
-    font-size: 0.9rem;
-  }
-
-  .game-board__fast-mode-toggle {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .game-board__fast-mode-label {
-    font-size: 0.9rem;
+  .game-board__hamburger {
+    display: flex;
   }
 
 
@@ -563,13 +581,13 @@
   }
 
   .game-board__middle-row {
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
+    grid-template-columns: minmax(90px, 110px) 1fr minmax(90px, 110px);
+    gap: 0.25rem;
   }
 
   .game-board__player--left,
   .game-board__player--right {
-    display: none;
+    display: flex;
   }
 
   .game-board__player--top {
@@ -613,77 +631,132 @@
 }
 
 @media (max-width: 480px) {
+  .game-board {
+    padding: 0.2rem;
+    gap: 0.4rem;
+  }
+
+  .game-board__header {
+    padding: 0.4rem 0.5rem;
+  }
+
   .game-board__title {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
   }
 
-
-
-  .game-board__rules-button {
-    font-size: 0.85rem;
-    padding: 0.45rem;
+  .game-board__table {
+    padding: 0.2rem;
+    gap: 0.2rem;
   }
 
-  .game-board__fast-mode-label {
-    font-size: 0.85rem;
-  }
-
-  .game-board__fast-mode-slider {
-    width: 42px;
-    height: 22px;
-  }
-
-  .game-board__fast-mode-slider::before {
-    width: 16px;
-    height: 16px;
-  }
-
-  .game-board__fast-mode-checkbox:checked + .game-board__fast-mode-slider::before {
-    transform: translateX(20px);
+  .game-board__middle-row {
+    grid-template-columns: minmax(85px, 100px) 1fr minmax(85px, 100px);
+    gap: 0.2rem;
   }
 
   .game-board__table-surface {
-    width: 260px;
-    height: 200px;
+    width: 150px;
+    height: 115px;
+    border-width: 2px;
+    border-radius: 12px;
   }
 
   .game-board__table-card--top {
-    top: 12px;
+    top: 6px;
   }
 
   .game-board__table-card--bottom {
-    bottom: 12px;
+    bottom: 6px;
   }
 
   .game-board__table-card--left {
-    left: 12px;
+    left: 6px;
   }
 
   .game-board__table-card--right {
-    right: 12px;
+    right: 6px;
   }
 
   .game-board__trick-winner {
-    font-size: 0.9rem;
-    padding: 0.4rem 0.8rem;
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
   }
 
   .game-board__player-info {
-    min-width: 200px;
-    padding: 0.5rem;
+    min-width: 160px;
+    padding: 0.35rem 0.5rem;
   }
 
   .game-board__player-name {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
   }
 
   .game-board__player-stats {
-    font-size: 0.75rem;
-    gap: 0.3rem;
+    font-size: 0.65rem;
+    gap: 0.2rem;
   }
 
   .game-board__player-stat {
-    padding: 0.25rem 0.4rem;
+    padding: 0.18rem 0.3rem;
+  }
+
+  .game-board__hearts-badge {
+    font-size: 1.3rem;
+    top: 6px;
+    right: 6px;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 375px) {
+  .game-board {
+    padding: 0.15rem;
+    gap: 0.3rem;
+  }
+
+  .game-board__header {
+    padding: 0.35rem 0.4rem;
+  }
+
+  .game-board__title {
+    font-size: 1rem;
+  }
+
+  .game-board__table {
+    padding: 0.15rem;
+  }
+
+  .game-board__middle-row {
+    grid-template-columns: minmax(75px, 90px) 1fr minmax(75px, 90px);
+    gap: 0.15rem;
+  }
+
+  .game-board__table-surface {
+    width: 135px;
+    height: 105px;
+    border-width: 2px;
+    border-radius: 10px;
+  }
+
+  .game-board__table-card--top {
+    top: 5px;
+  }
+
+  .game-board__table-card--bottom {
+    bottom: 5px;
+  }
+
+  .game-board__table-card--left {
+    left: 5px;
+  }
+
+  .game-board__table-card--right {
+    right: 5px;
+  }
+
+  .game-board__player-info {
+    min-width: 140px;
+    padding: 0.3rem 0.4rem;
   }
 }
 

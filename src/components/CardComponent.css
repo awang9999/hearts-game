@@ -152,3 +152,60 @@
     font-size: 1.1rem;
   }
 }
+
+/* Extra small mobile devices (iPhone SE, etc.) */
+@media (max-width: 480px) {
+  .card--small {
+    width: 26px;
+    height: 37px;
+    font-size: 0.5rem;
+    border-width: 1.5px;
+  }
+
+  .card--medium {
+    width: 35px;
+    height: 49px;
+    font-size: 0.65rem;
+    border-width: 1.5px;
+  }
+  
+  .card--large {
+    width: 48px;
+    height: 67px;
+    font-size: 0.8rem;
+    border-width: 2px;
+  }
+
+  .card__suit {
+    font-size: 1.2em;
+  }
+
+  .card--clickable:hover {
+    transform: translateY(-5px);
+  }
+
+  .card--selected {
+    transform: translateY(-6px);
+  }
+}
+
+/* Very small screens (narrow phones) */
+@media (max-width: 375px) {
+  .card--small {
+    width: 24px;
+    height: 34px;
+    font-size: 0.48rem;
+  }
+
+  .card--medium {
+    width: 32px;
+    height: 45px;
+    font-size: 0.6rem;
+  }
+  
+  .card--large {
+    width: 44px;
+    height: 62px;
+    font-size: 0.75rem;
+  }
+}

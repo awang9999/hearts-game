@@ -41,18 +41,19 @@ export function evaluateCardSafety(card: Card, _hand: Card[], _gameState: GameSt
  * Selects a card for the AI to lead a trick
  * Requirements: 8.1, 8.2
  * 
- * Strategy:
- * 1. Lead low cards from long suits
- * 2. Avoid leading suits where we hold high cards
- * 3. Lead spades if we don't have the Queen
- * 4. If forced to lead Hearts, lead high Hearts
+ * Advanced Strategy:
+ * 1. Lead very low cards (2-4) to deliberately lose the lead
+ * 2. "Smoke out" Queen of Spades by leading low spades if we don't have it
+ * 3. Hold low hearts for dangerous final tricks
+ * 4. Lead from long suits for control
+ * 5. If forced to lead Hearts, be strategic about timing
  * 
  * @param hand - The AI player's hand
  * @param validPlays - The valid cards that can be played
  * @param gameState - The current game state
  * @returns The card to play
  */
-export function selectCardToLead(hand: Card[], validPlays: Card[], _gameState: GameState): Card {
+export function selectCardToLead(hand: Card[], validPlays: Card[], gameState: GameState): Card {
   if (validPlays.length === 0) {
     throw new Error('No valid plays available');
   }
@@ -68,6 +69,11 @@ export function selectCardToLead(hand: Card[], validPlays: Card[], _gameState: G
     suitCounts.set(card.suit, (suitCounts.get(card.suit) || 0) + 1);
   }
 
+  // Calculate how many tricks have been played (early vs late game)
+  const tricksPlayed = gameState.players[0].tricksTaken.length;
+  const isEarlyGame = tricksPlayed < 4;
+  const isLateGame = tricksPlayed >= 10;
+
   // Separate valid plays by type
   const nonHearts = validPlays.filter(c => !isHeart(c));
   const hearts = validPlays.filter(c => isHeart(c));
@@ -77,36 +83,69 @@ export function selectCardToLead(hand: Card[], validPlays: Card[], _gameState: G
     // Check if we have the Queen of Spades
     const hasQueenOfSpades = hand.some(c => isQueenOfSpades(c));
 
-    // If we don't have Queen of Spades, spades are safe to lead
-    if (!hasQueenOfSpades) {
+    // Strategy: "Smoke out" the Queen of Spades in early game
+    if (isEarlyGame && !hasQueenOfSpades) {
       const spades = nonHearts.filter(c => c.suit === 'spades');
       if (spades.length > 0) {
-        // Lead lowest spade
-        return spades.reduce((lowest, card) => 
-          card.value < lowest.value ? card : lowest
-        );
+        // Lead low spades to force out the Queen
+        const lowSpades = spades.filter(c => c.value <= 11); // J or lower
+        if (lowSpades.length > 0) {
+          return lowSpades.reduce((lowest, card) => 
+            card.value < lowest.value ? card : lowest
+          );
+        }
       }
     }
 
-    // Lead from longest suit (more control)
+    // Strategy: Lead very low cards (2-4) to deliberately lose the lead
+    const veryLowCards = nonHearts.filter(c => c.value >= 2 && c.value <= 4);
+    if (veryLowCards.length > 0 && !isLateGame) {
+      // Prefer leading from longest suit for control
+      const cardsWithSuitLength = veryLowCards.map(card => ({
+        card,
+        suitLength: suitCounts.get(card.suit) || 0
+      }));
+      cardsWithSuitLength.sort((a, b) => b.suitLength - a.suitLength);
+      return cardsWithSuitLength[0].card;
+    }
+
+    // Strategy: Lead from longest suit (more control)
     const cardsWithSuitLength = nonHearts.map(card => ({
       card,
-      suitLength: suitCounts.get(card.suit) || 0
+      suitLength: suitCounts.get(card.suit) || 0,
+      isHigh: card.value >= 12 // Q, K, A
     }));
 
-    // Sort by suit length (descending), then by card value (ascending)
+    // Sort by: avoid high cards, prefer long suits, then low values
     cardsWithSuitLength.sort((a, b) => {
+      // Avoid leading high cards
+      if (a.isHigh !== b.isHigh) {
+        return a.isHigh ? 1 : -1;
+      }
+      // Prefer longer suits
       if (b.suitLength !== a.suitLength) {
         return b.suitLength - a.suitLength;
       }
+      // Prefer lower values
       return a.card.value - b.card.value;
     });
 
     return cardsWithSuitLength[0].card;
   }
 
-  // If we must lead Hearts, lead high Hearts to avoid taking them later
+  // Strategy: If forced to lead Hearts, timing matters
   if (hearts.length > 0) {
+    // In late game, hold low hearts for passing the lead
+    if (isLateGame) {
+      const lowHearts = hearts.filter(c => c.value <= 7);
+      if (lowHearts.length > 0) {
+        // Keep the very lowest, lead the next lowest
+        const sorted = lowHearts.sort((a, b) => a.value - b.value);
+        return sorted.length > 1 ? sorted[1] : sorted[0];
+      }
+    }
+
+    // Otherwise lead high Hearts to avoid taking them later
     return hearts.reduce((highest, card) => 
       card.value > highest.value ? card : highest
     );
@@ -120,18 +159,19 @@ export function selectCardToLead(hand: Card[], validPlays: Card[], _gameState: G
  * Selects a card for the AI to follow suit
  * Requirements: 8.1, 8.2
  * 
- * Strategy:
- * 1. If we cannot win the trick, play the highest card that won't win
- * 2. If we must win, play the lowest card that wins
- * 3. On the first trick, play the highest card possible (no points)
- * 4. Avoid taking the Queen of Spades unless shooting the moon
+ * Advanced Strategy:
+ * 1. "Undershooting" - play just below the current high card to avoid winning
+ * 2. Protect very low cards (2-4) for late game safety
+ * 3. On first trick, play highest card (no penalty risk)
+ * 4. Avoid taking tricks with Queen of Spades or Hearts
+ * 5. If must win, minimize damage
  * 
  * @param hand - The AI player's hand
  * @param validPlays - The valid cards that can be played (all same suit)
  * @param gameState - The current game state
  * @returns The card to play
  */
-export function selectCardToFollow(_hand: Card[], validPlays: Card[], gameState: GameState): Card {
+export function selectCardToFollow(hand: Card[], validPlays: Card[], gameState: GameState): Card {
   if (validPlays.length === 0) {
     throw new Error('No valid plays available');
   }
@@ -148,10 +188,18 @@ export function selectCardToFollow(_hand: Card[], validPlays: Card[], gameState:
 
   // Find the highest card played so far in the led suit
   let highestValueInTrick = 0;
+  let trickHasQueenOfSpades = false;
+  let trickHasHearts = false;
 
   for (const playedCard of gameState.currentTrick) {
     if (playedCard.card.suit === ledSuit && playedCard.card.value > highestValueInTrick) {
       highestValueInTrick = playedCard.card.value;
+    }
+    if (isQueenOfSpades(playedCard.card)) {
+      trickHasQueenOfSpades = true;
+    }
+    if (isHeart(playedCard.card)) {
+      trickHasHearts = true;
     }
   }
 
@@ -159,32 +207,72 @@ export function selectCardToFollow(_hand: Card[], validPlays: Card[], gameState:
   const winningCards = validPlays.filter(c => c.value > highestValueInTrick);
   const losingCards = validPlays.filter(c => c.value <= highestValueInTrick);
 
-  // On first trick, play highest card (no penalty risk)
+  // Calculate game stage
   const tricksPlayed = gameState.players[0].tricksTaken.length;
-  if (tricksPlayed === 0 && gameState.currentTrick.length < 4) {
+  const isFirstTrick = tricksPlayed === 0;
+  const isLateGame = tricksPlayed >= 10;
+
+  // On first trick, play highest card (no penalty risk)
+  if (isFirstTrick && gameState.currentTrick.length < 4) {
     return validPlays.reduce((highest, card) => 
       card.value > highest.value ? card : highest
     );
   }
 
+  // Strategy: Protect very low cards (2-4) for late game
+  const veryLowCards = validPlays.filter(c => c.value >= 2 && c.value <= 4);
+  const otherCards = validPlays.filter(c => c.value > 4);
+
   // If we can avoid winning, do so
   if (losingCards.length > 0) {
-    // Play the highest card that won't win (get rid of high cards safely)
-    return losingCards.reduce((highest, card) => 
-      card.value > highest.value ? card : highest
-    );
+    // Strategy: "Undershooting" - play just below the high card
+    // But protect very low cards unless late game or no choice
+    const losingNonLow = losingCards.filter(c => c.value > 4);
+    
+    if (losingNonLow.length > 0) {
+      // Play the highest card that won't win (undershooting)
+      return losingNonLow.reduce((highest, card) => 
+        card.value > highest.value ? card : highest
+      );
+    }
+
+    // If only very low cards available, use them in late game
+    if (isLateGame || losingCards.length === validPlays.length) {
+      return losingCards.reduce((highest, card) => 
+        card.value > highest.value ? card : highest
+      );
+    }
   }
 
   // If we must win, try to minimize damage
   if (winningCards.length > 0) {
-    // If the trick has penalties, try to avoid winning if possible
-    // But if we must win, play the lowest winning card
+    // Check if trick has dangerous cards
+    const trickIsDangerous = trickHasQueenOfSpades || trickHasHearts;
+    
+    // If trick is dangerous and we have non-low cards, use those first
+    if (trickIsDangerous && otherCards.length > 0) {
+      const winningNonLow = winningCards.filter(c => c.value > 4);
+      if (winningNonLow.length > 0) {
+        // Play the lowest winning card (but not very low)
+        return winningNonLow.reduce((lowest, card) => 
+          card.value < lowest.value ? card : lowest
+        );
+      }
+    }
+
+    // Play the lowest winning card
     return winningCards.reduce((lowest, card) => 
       card.value < lowest.value ? card : lowest
     );
   }
 
-  // Fallback: return first valid play
+  // Fallback: prefer non-low cards if available
+  if (otherCards.length > 0) {
+    return otherCards.reduce((highest, card) => 
+      card.value > highest.value ? card : highest
+    );
+  }
+
   return validPlays[0];
 }
 
@@ -192,18 +280,20 @@ export function selectCardToFollow(_hand: Card[], validPlays: Card[], gameState:
  * Selects a card for the AI to slough (play off-suit)
  * Requirements: 8.1, 8.2
  * 
- * Strategy:
- * 1. If someone else will take the trick, dump high penalty cards
- * 2. Prioritize dumping Queen of Spades if safe
- * 3. Dump high Hearts
- * 4. Keep low cards for future control
+ * Advanced Strategy:
+ * 1. Being void is advantageous - use it to dump dangerous cards
+ * 2. Prioritize dumping Queen of Spades when safe
+ * 3. Dump high Hearts (especially Ace of Hearts if not shooting moon)
+ * 4. Dump high face cards that could win unwanted tricks
+ * 5. Protect very low cards (2-4) for future control
+ * 6. Consider who will win the trick
  * 
  * @param hand - The AI player's hand
  * @param validPlays - The valid cards that can be played
  * @param gameState - The current game state
  * @returns The card to play
  */
-export function selectCardToSlough(_hand: Card[], validPlays: Card[], _gameState: GameState): Card {
+export function selectCardToSlough(hand: Card[], validPlays: Card[], gameState: GameState): Card {
   if (validPlays.length === 0) {
     throw new Error('No valid plays available');
   }
@@ -213,30 +303,86 @@ export function selectCardToSlough(_hand: Card[], validPlays: Card[], _gameState
     return validPlays[0];
   }
 
-  // Prioritize getting rid of dangerous cards
+  // Determine who is likely to win this trick
+  const ledSuit = getLedSuit(gameState);
+  let currentWinningValue = 0;
+  let currentWinningPlayerId = '';
+
+  if (ledSuit) {
+    for (const playedCard of gameState.currentTrick) {
+      if (playedCard.card.suit === ledSuit && playedCard.card.value > currentWinningValue) {
+        currentWinningValue = playedCard.card.value;
+        currentWinningPlayerId = playedCard.playerId;
+      }
+    }
+  }
+
+  // Check if we're the last to play (most certain about who wins)
+  const isLastToPlay = gameState.currentTrick.length === 3;
+
+  // Strategy: Prioritize dumping Queen of Spades when safe
   const queenOfSpades = validPlays.find(c => isQueenOfSpades(c));
   if (queenOfSpades) {
     return queenOfSpades;
   }
 
-  // Dump high Hearts
+  // Separate cards by type
   const hearts = validPlays.filter(c => isHeart(c));
-  if (hearts.length > 0) {
-    // Dump highest Heart
-    return hearts.reduce((highest, card) => 
-      card.value > highest.value ? card : highest
-    );
+  const nonHearts = validPlays.filter(c => !isHeart(c));
+  const aceOfHearts = hearts.find(c => c.rank === 'A');
+  const highCards = validPlays.filter(c => c.value >= 12); // Q, K, A
+  const veryLowCards = validPlays.filter(c => c.value >= 2 && c.value <= 4);
+
+  // Strategy: Dump Ace of Hearts (prevents moon shots and is high penalty)
+  if (aceOfHearts && isLastToPlay) {
+    return aceOfHearts;
   }
 
-  // Dump other high cards
-  const highCards = validPlays.filter(c => c.value >= 12); // Q, K, A
+  // Strategy: Dump high Hearts
+  if (hearts.length > 0) {
+    const highHearts = hearts.filter(c => c.value >= 10);
+    if (highHearts.length > 0) {
+      // Dump highest Heart
+      return highHearts.reduce((highest, card) => 
+        card.value > highest.value ? card : highest
+      );
+    }
+  }
+
+  // Strategy: Dump high face cards (dangerous in other suits)
   if (highCards.length > 0) {
+    const highNonHearts = highCards.filter(c => !isHeart(c));
+    if (highNonHearts.length > 0) {
+      return highNonHearts.reduce((highest, card) => 
+        card.value > highest.value ? card : highest
+      );
+    }
+    // If only high hearts left, dump highest
     return highCards.reduce((highest, card) => 
       card.value > highest.value ? card : highest
     );
   }
 
-  // Keep low cards, so dump highest remaining card
+  // Strategy: Dump remaining Hearts (but keep very low ones if possible)
+  if (hearts.length > 0) {
+    const nonLowHearts = hearts.filter(c => c.value > 4);
+    if (nonLowHearts.length > 0) {
+      return nonLowHearts.reduce((highest, card) => 
+        card.value > highest.value ? card : highest
+      );
+    }
+  }
+
+  // Strategy: Protect very low cards (2-4) - they guarantee not winning tricks
+  const nonVeryLow = validPlays.filter(c => c.value > 4);
+  if (nonVeryLow.length > 0) {
+    // Dump highest non-very-low card
+    return nonVeryLow.reduce((highest, card) => 
+      card.value > highest.value ? card : highest
+    );
+  }
+
+  // Last resort: dump highest card (even if very low)
   return validPlays.reduce((highest, card) => 
     card.value > highest.value ? card : highest
   );

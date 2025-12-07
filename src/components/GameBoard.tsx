@@ -8,6 +8,7 @@ import { GameControls } from './GameControls';
 import { GameOver } from './GameOver';
 import { HandComplete } from './HandComplete';
 import { Rules } from './Rules';
+import { MobileMenu } from './MobileMenu';
 import { useGame } from '../hooks/useGame';
 import { getValidPlays } from '../logic/moveValidation';
 import { determineTrickWinner } from '../logic/trickResolution';
@@ -52,6 +53,7 @@ export function GameBoard() {
   const [trickWinner, setTrickWinner] = useState<string | null>(null);
   const [showingTrickResult, setShowingTrickResult] = useState(false);
   const [showRules, setShowRules] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [fastMode, setFastMode] = useState(false);
   const [selectedPassingCount, setSelectedPassingCount] = useState(0);
   const previousTrickLength = useRef(0);
@@ -166,6 +168,15 @@ export function GameBoard() {
     startNewHand();
   };
 
+  const handleToggleFastMode = (enabled: boolean) => {
+    setFastMode(enabled);
+    try {
+      localStorage.setItem('hearts-fast-mode', JSON.stringify(enabled));
+    } catch (e) {
+      // localStorage not available
+    }
+  };
+
   return (
     <div className="game-board">
       {/* Header with game info */}
@@ -179,7 +190,9 @@ export function GameBoard() {
           </span>
           Hearts
         </h1>
-        <div className="game-board__header-controls">
+        
+        {/* Desktop controls */}
+        <div className="game-board__header-controls game-board__header-controls--desktop">
           <button 
             className="game-board__rules-button"
             onClick={() => setShowRules(true)}
@@ -192,15 +205,7 @@ export function GameBoard() {
             <input
               type="checkbox"
               checked={fastMode}
-              onChange={(e) => {
-                const newFastMode = e.target.checked;
-                setFastMode(newFastMode);
-                try {
-                  localStorage.setItem('hearts-fast-mode', JSON.stringify(newFastMode));
-                } catch (e) {
-                  // localStorage not available
-                }
-              }}
+              onChange={(e) => handleToggleFastMode(e.target.checked)}
               className="game-board__fast-mode-checkbox"
               aria-label="Toggle fast mode"
             />
@@ -212,6 +217,17 @@ export function GameBoard() {
             onNewHand={handleNewHand}
           />
         </div>
+
+        {/* Mobile hamburger button */}
+        <button
+          className="game-board__hamburger"
+          onClick={() => setShowMobileMenu(true)}
+          aria-label="Open menu"
+        >
+          <span className="game-board__hamburger-line"></span>
+          <span className="game-board__hamburger-line"></span>
+          <span className="game-board__hamburger-line"></span>
+        </button>
       </div>
 
 
@@ -442,6 +458,18 @@ export function GameBoard() {
 
       {/* Rules modal */}
       {showRules && <Rules onClose={() => setShowRules(false)} />}
+
+      {/* Mobile menu */}
+      <MobileMenu
+        isOpen={showMobileMenu}
+        onClose={() => setShowMobileMenu(false)}
+        onShowRules={() => setShowRules(true)}
+        onNewGame={handleNewGame}
+        onNewHand={handleNewHand}
+        fastMode={fastMode}
+        onToggleFastMode={handleToggleFastMode}
+        phase={gameState.phase}
+      />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { GameBoard, ErrorBoundary } from './components';
+import { GameBoard, ErrorBoundary, Footer } from './components';
 import './App.css';
 
 /**
@@ -12,6 +12,7 @@ function App() {
       <ErrorBoundary>
         <GameBoard />
       </ErrorBoundary>
+      <Footer />
     </div>
   );
 }

@@ -11,3 +11,5 @@ export { GameOver } from './GameOver';
 export { HandComplete } from './HandComplete';
 export { ErrorBoundary } from './ErrorBoundary';
 export { Rules } from './Rules';
+export { default as Footer } from './Footer';
+export { MobileMenu } from './MobileMenu';
