@@ -15,9 +15,7 @@
 }
 
 .opponent--active {
-  background: rgba(33, 150, 243, 0.1);
-  border: 2px solid #2196f3;
-  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.3);
+  box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.4), 0 4px 16px rgba(33, 150, 243, 0.5);
 }
 
 /* AI thinking indicator - Requirements: 8.3 */

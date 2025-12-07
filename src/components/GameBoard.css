@@ -16,7 +16,6 @@
 
 /* Center specific elements that should be centered */
 .game-board__header,
-.game-board__status,
 .game-board__passing,
 .game-board__player-area {
   align-self: center;
@@ -153,90 +152,19 @@
 
 
 
-/* Status indicators - Requirements: 10.3, 10.4 */
-.game-board__status {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-  padding: 0.75rem;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* Hearts badge - Requirements: 10.4 */
+.game-board__hearts-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-size: 2rem;
+  z-index: 5;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  transition: transform 0.3s ease;
 }
 
-.game-board__turn-indicator,
-.game-board__hearts-status {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.game-board__status-label {
-  font-weight: 600;
-  color: #666;
-  font-size: 0.95rem;
-}
-
-.game-board__status-value {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #333;
-}
-
-.game-board__status-value--highlight {
-  color: #2196f3;
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.7;
-  }
-}
-
-.game-board__status-value--broken {
-  color: #d32f2f;
-}
-
-.game-board__status-value--thinking {
-  color: #ff9800;
-}
-
-.game-board__thinking-indicator {
-  font-size: 0.9rem;
-  color: #ff9800;
-  font-style: italic;
-  margin-left: 0.5rem;
-}
-
-.game-board__thinking-dots {
-  display: inline-block;
-}
-
-.game-board__thinking-dots span {
-  animation: blink 1.4s infinite;
-  animation-fill-mode: both;
-}
-
-.game-board__thinking-dots span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.game-board__thinking-dots span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@keyframes blink {
-  0%, 80%, 100% {
-    opacity: 0;
-  }
-  40% {
-    opacity: 1;
-  }
+.game-board__hearts-badge:hover {
+  transform: scale(1.15);
 }
 
 /* Main game table layout - Requirements: 8.3, 10.1 */
@@ -417,37 +345,6 @@
   margin-top: 0.25rem;
 }
 
-/* AI thinking indicator - Requirements: 8.3 */
-.game-board__ai-thinking {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  padding: 1rem;
-  background: rgba(33, 150, 243, 0.1);
-  border: 2px solid #2196f3;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: #1976d2;
-}
-
-.game-board__ai-thinking-spinner {
-  width: 24px;
-  height: 24px;
-  border: 3px solid rgba(33, 150, 243, 0.3);
-  border-top-color: #2196f3;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .game-board__no-passing {
   text-align: center;
   padding: 2rem;
@@ -484,10 +381,15 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 1rem;
-  background: rgba(33, 150, 243, 0.1);
-  border: 2px solid #2196f3;
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 8px;
   min-width: 300px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s ease;
+}
+
+.game-board__player-info--active {
+  box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.4), 0 4px 16px rgba(33, 150, 243, 0.5);
 }
 
 .game-board__player-name {
@@ -510,7 +412,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.3rem 0.5rem;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(0, 0, 0, 0.05);
   border-radius: 4px;
 }
 
@@ -549,15 +451,6 @@
   width: 100%;
 }
 
-.game-board__wait-message {
-  font-size: 1rem;
-  color: #666;
-  font-style: italic;
-  padding: 0.5rem;
-}
-
-
-
 /* iPad portrait optimization - Requirements: 9.1, 9.3 */
 @media (min-width: 768px) and (max-width: 834px) and (orientation: portrait) {
   .game-board {
@@ -569,10 +462,7 @@
     font-size: 1.75rem;
   }
 
-  .game-board__status {
-    gap: 1.5rem;
-    padding: 0.875rem;
-  }
+
 
   .game-board__player-info {
     min-width: 280px;
@@ -595,10 +485,7 @@
     font-size: 1.5rem;
   }
 
-  .game-board__status {
-    flex-direction: row;
-    gap: 1.5rem;
-  }
+
 
   .game-board__table {
     padding: 0.75rem;
@@ -660,19 +547,7 @@
     font-size: 0.9rem;
   }
 
-  .game-board__status {
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 0.5rem;
-  }
 
-  .game-board__status-label {
-    font-size: 0.85rem;
-  }
-
-  .game-board__status-value {
-    font-size: 1rem;
-  }
 
   .game-board__table {
     padding: 0.5rem;
@@ -734,9 +609,7 @@
     font-size: 1.3rem;
   }
 
-  .game-board__status {
-    font-size: 0.9rem;
-  }
+
 
   .game-board__rules-button {
     font-size: 0.85rem;
@@ -836,11 +709,7 @@
     font-size: 0.85rem;
   }
 
-  .game-board__status {
-    flex-direction: row;
-    gap: 1rem;
-    padding: 0.5rem;
-  }
+
 
   .game-board__table {
     padding: 0.5rem;

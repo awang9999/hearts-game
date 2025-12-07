@@ -23,7 +23,9 @@ export function GameOver({ players, onNewGame }: GameOverProps) {
         
         <div className="game-over__winner">
           <span className="game-over__trophy">🏆</span>
-          <span className="game-over__winner-name">{winner.name} Wins!</span>
+          <span className="game-over__winner-name">
+            {winner.isHuman ? 'You Win!' : `${winner.name} Wins!`}
+          </span>
         </div>
 
         <div className="game-over__scores">

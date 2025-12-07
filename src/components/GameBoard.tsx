@@ -81,6 +81,14 @@ export function GameBoard() {
 
     const currentTrickLength = gameState.currentTrick.length;
 
+    // Clear winner message when phase changes (hand ends, passing starts, etc.)
+    if (gameState.phase !== 'playing') {
+      setShowingTrickResult(false);
+      setTrickWinner(null);
+      previousTrickLength.current = 0;
+      return;
+    }
+
     // Clear winner message when new trick starts
     if (currentTrickLength === 1 && previousTrickLength.current === 0) {
       setShowingTrickResult(false);
@@ -108,7 +116,7 @@ export function GameBoard() {
     }
 
     previousTrickLength.current = currentTrickLength;
-  }, [gameState, gameState?.currentTrick.length, gameState?.players]);
+  }, [gameState, gameState?.currentTrick.length, gameState?.players, gameState?.phase]);
 
   if (!gameState) {
     return (
@@ -198,54 +206,7 @@ export function GameBoard() {
         </div>
       </div>
 
-      {/* Game status indicators */}
-      <div className="game-board__status">
-        {/* Turn indicator - Requirements: 8.3, 10.3 */}
-        <div className="game-board__turn-indicator">
-          {gameState.phase === 'playing' && (
-            <>
-              <span className="game-board__status-label">Turn:</span>
-              <span className={`game-board__status-value ${isHumanTurn ? 'game-board__status-value--highlight' : ''} ${isProcessingAI && !isHumanTurn ? 'game-board__status-value--thinking' : ''}`}>
-                {currentPlayer.name}
-                {isProcessingAI && !isHumanTurn && (
-                  <>
-                    {' '}
-                    <span className="game-board__thinking-dots">
-                      <span>.</span><span>.</span><span>.</span>
-                    </span>
-                  </>
-                )}
-              </span>
-            </>
-          )}
-          {gameState.phase === 'passing' && (
-            <>
-              <span className="game-board__status-value">Passing Phase</span>
-              {isProcessingAI && (
-                <span className="game-board__thinking-indicator">
-                  (AI selecting cards<span className="game-board__thinking-dots"><span>.</span><span>.</span><span>.</span></span>)
-                </span>
-              )}
-            </>
-          )}
-          {gameState.phase === 'handComplete' && (
-            <span className="game-board__status-value">Hand Complete</span>
-          )}
-          {gameState.phase === 'gameOver' && (
-            <span className="game-board__status-value">Game Over</span>
-          )}
-        </div>
 
-        {/* Hearts broken indicator - Requirements: 10.4 */}
-        {gameState.phase === 'playing' && (
-          <div className="game-board__hearts-status">
-            <span className="game-board__status-label">Hearts:</span>
-            <span className={`game-board__status-value ${gameState.heartsBroken ? 'game-board__status-value--broken' : ''}`}>
-              {gameState.heartsBroken ? '💔 Broken' : '❤️ Not Broken'}
-            </span>
-          </div>
-        )}
-      </div>
 
       {/* Error display */}
       {error && (
@@ -284,6 +245,13 @@ export function GameBoard() {
 
           {/* Central table area with played cards */}
           <div className="game-board__table-surface">
+            {/* Hearts indicator - Requirements: 10.4 */}
+            {gameState.phase === 'playing' && (
+              <div className="game-board__hearts-badge">
+                {gameState.heartsBroken ? '💔' : '❤️'}
+              </div>
+            )}
+
             {/* Top player's card */}
             {aiPlayers[1] && (() => {
               const playedCard = gameState.currentTrick.find(pc => pc.playerId === aiPlayers[1].id);
@@ -398,12 +366,6 @@ export function GameBoard() {
             </div>
           </div>
 
-          {isProcessingAI && (
-            <div className="game-board__ai-thinking">
-              <div className="game-board__ai-thinking-spinner"></div>
-              <span>AI players are selecting cards to pass...</span>
-            </div>
-          )}
           {gameState.passingDirection !== 'none' && (
             <PassingInterface
               cards={humanPlayer.hand}
@@ -422,7 +384,7 @@ export function GameBoard() {
       {gameState.phase === 'playing' && (
         <div className="game-board__player-area">
           {/* Human player stats */}
-          <div className="game-board__player-info">
+          <div className={`game-board__player-info ${isHumanTurn ? 'game-board__player-info--active' : ''}`}>
             <div className="game-board__player-name">
               {humanPlayer.name}
             </div>
@@ -450,11 +412,6 @@ export function GameBoard() {
               disabledCards={disabledCards}
               label=""
             />
-            {!isHumanTurn && (
-              <div className="game-board__wait-message">
-                Waiting for {currentPlayer.name}...
-              </div>
-            )}
           </div>
         </div>
       )}
