@@ -170,7 +170,15 @@ export function GameBoard() {
     <div className="game-board">
       {/* Header with game info */}
       <div className="game-board__header">
-        <h1 className="game-board__title">Hearts</h1>
+        <h1 className="game-board__title">
+          <span className="game-board__title-card">
+            <CardComponent 
+              card={{ suit: 'hearts', rank: 'A', value: 14 }} 
+              size="small"
+            />
+          </span>
+          Hearts
+        </h1>
         <div className="game-board__header-controls">
           <button 
             className="game-board__rules-button"
